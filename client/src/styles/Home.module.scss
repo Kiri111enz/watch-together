@@ -8,6 +8,10 @@
     justify-content: center;
 }
 
+.button {
+    @include m.button;
+}
+
 .buttonLarge {
     @include m.button;
     padding: 1em;
@@ -22,4 +26,54 @@
 
 .container > .buttonLarge {
     margin: 2em 0.5em;
+}
+
+#chooseFileContainer {
+    display: grid;
+    padding: 0.5em 0em;
+}
+
+#chooseFileContainer input[type=file] {
+    display: none;
+}
+
+.fileButton {
+    @extend .button;
+    border-color: black;
+    font-size: small;
+
+    grid-column: 1;
+    grid-row: 1;
+    white-space: nowrap;
+}
+
+.fileLabel {
+    grid-column: 2;
+    grid-row: 1;
+    margin: auto 1em;
+    white-space: nowrap;
+}
+
+.buttonContinue {
+    @extend .button;
+    margin-top: 0.5em;
+    grid-column: 1 / 3;
+    grid-row: 2;
+}
+
+#enterIdContainer {
+    @include m.flex-col;
+    padding: 0.5em 0em;
+}
+
+.textInput {
+    margin: 0.5em 0em;
+
+    border: none;
+
+    @include m.font-large;
+}
+
+.textInput:focus {
+    outline: none;
 }
