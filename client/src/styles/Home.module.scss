@@ -1,0 +1,9 @@
+@use 'mixins' as m;
+
+.container {
+    @include m.abs-centered;
+    height: 100%;
+
+    @include m.flex-col;
+    justify-content: center;
+}

@@ -1,0 +1,15 @@
+@mixin abs-centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@mixin flex {
+    display: flex;
+}
+
+@mixin flex-col {
+    @include flex;
+    flex-direction: column;
+}
