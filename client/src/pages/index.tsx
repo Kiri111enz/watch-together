@@ -1,5 +1,6 @@
-import Popup from 'components/Popup';
 import { useState, useRef } from 'react';
+import Popup from 'components/Popup';
+import * as ioClient from 'services/ioClient';
 import styles from 'styles/Home.module.scss';
 
 enum MenuState {
@@ -11,6 +12,7 @@ enum MenuState {
 const Home: React.FC = () => {
     const [menuState, setMenuState] = useState(MenuState.None);
     const fileLabel = useRef(null);
+    const roomIdInput = useRef(null);
 
     return (
         <>
@@ -32,13 +34,15 @@ const Home: React.FC = () => {
                             fileLabel.current.textContent = event.target.files[0] ? 
                                 event.target.files[0].name : 'no file yet';
                         }}/>
-                    <button className={styles.buttonContinue}>Continue</button>
+                    <button className={styles.buttonContinue}
+                        onClick={async () => console.log(await ioClient.createRoom())}>Continue</button>
                 </div>
                 }
                 {menuState === MenuState.EnterId && 
                 <div id={styles.enterIdContainer}>
-                    <input className={styles.textInput} type="text" placeholder="Enter room id..." />
-                    <button className={styles.button}>Continue</button>
+                    <input ref={roomIdInput} className={styles.textInput} type="text" placeholder="Enter room id..." />
+                    <button className={styles.button}
+                        onClick={async () => console.log(await ioClient.joinRoom(roomIdInput.current.value))}>Continue</button>
                 </div>
                 }
             </Popup>
