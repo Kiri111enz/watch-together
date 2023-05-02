@@ -13,3 +13,26 @@
     @include flex;
     flex-direction: column;
 }
+
+@mixin font-large {
+    font-size: large;
+}
+
+@mixin border-with-radius($radius) {
+    border-style: solid;
+    border-radius: $radius;
+}
+
+@mixin button {
+    background: black;
+    color: white;
+
+    padding: 0.5em;
+    margin: 0.25em;
+    @include border-with-radius(2em);
+
+    transition: 0.2s;
+    &:hover {
+        box-shadow: 0 0 0 0.25em black;
+    }
+}

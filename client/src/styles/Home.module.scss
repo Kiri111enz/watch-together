@@ -7,3 +7,19 @@
     @include m.flex-col;
     justify-content: center;
 }
+
+.buttonLarge {
+    @include m.button;
+    padding: 1em;
+    margin: 0.5em;
+
+    @include m.font-large;
+}
+
+.buttonLarge:hover {
+    box-shadow: 0 0 0 0.5em black;
+}
+
+.container > .buttonLarge {
+    margin: 2em 0.5em;
+}
