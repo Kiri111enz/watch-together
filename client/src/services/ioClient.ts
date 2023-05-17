@@ -21,3 +21,8 @@ export const joinRoom = (id: number): Promise<boolean> => {
     socket.emit('joinRoom', id);
     return waitforResponse('joinRoom') as Promise<boolean>;
 };
+
+export const roomExists = (id: string): Promise<boolean> => {
+    socket.emit('roomExists', id);
+    return waitforResponse('roomExists') as Promise<boolean>;
+};

@@ -18,6 +18,11 @@ export const init = (server: http.Server): void => {
                 return id;
         }
     };
+
+    const addToRoom = (roomId: string, socket: SocketPlus): void => {
+        socket.roomId = roomId;
+        socket.join(roomId);
+    };
     
     const io = new Server(server, { cors: { origin: process.env.CLIENT_URL, methods: ['GET', 'POST'] }});
 
@@ -26,8 +31,7 @@ export const init = (server: http.Server): void => {
 
         socket.on('createRoom', () => {
             const roomId = getUniqueRoomId();
-            socket.roomId = roomId;
-            socket.join(roomId);
+            addToRoom(roomId, socket);
             socket.emit('createRoom', roomId);
             console.log(`Room ${roomId} has been created.`);
         });
@@ -38,10 +42,13 @@ export const init = (server: http.Server): void => {
                 return;
             }
 
-            socket.roomId = roomId;
-            socket.join(roomId);
+            addToRoom(roomId, socket);
             socket.emit('joinRoom', true);
             console.log(`Room ${roomId} has a new member.`);
+        });
+
+        socket.on('roomExists', (roomId: string) => {
+            socket.emit('roomExists', roomExists(roomId));
         });
     });
 };

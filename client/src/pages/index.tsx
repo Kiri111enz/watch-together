@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { useRouter } from 'next/router';
 import Popup from 'components/Popup';
 import * as ioClient from 'services/ioClient';
 import styles from 'styles/Home.module.scss';
@@ -13,6 +14,7 @@ const Home: React.FC = () => {
     const [menuState, setMenuState] = useState(MenuState.None);
     const fileLabel = useRef(null);
     const roomIdInput = useRef(null);
+    const router = useRouter();
 
     return (
         <>
@@ -35,14 +37,17 @@ const Home: React.FC = () => {
                                 event.target.files[0].name : 'no file yet';
                         }}/>
                     <button className={styles.buttonContinue}
-                        onClick={async () => console.log(await ioClient.createRoom())}>Continue</button>
+                        onClick={async () => router.push(`/${await ioClient.createRoom()}`)}>Continue</button>
                 </div>
                 }
                 {menuState === MenuState.EnterId && 
                 <div id={styles.enterIdContainer}>
                     <input ref={roomIdInput} className={styles.textInput} type="text" placeholder="Enter room id..." />
                     <button className={styles.button}
-                        onClick={async () => console.log(await ioClient.joinRoom(roomIdInput.current.value))}>Continue</button>
+                        onClick={async () => {
+                            if (await ioClient.joinRoom(roomIdInput.current.value))
+                                router.push(`/${roomIdInput.current.value}`);
+                        }}>Continue</button>
                 </div>
                 }
             </Popup>
