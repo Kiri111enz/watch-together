@@ -1,0 +1,27 @@
+@use 'mixins' as m;
+
+.container {
+    @include m.flex-col;
+    padding: 0.5em 0em;
+}
+
+.container input[type=file] {
+    display: none;
+}
+
+.roomIdLabel {
+    text-align: center;
+}
+
+.roomId {
+    @include m.font-large;
+    @include m.font-bold;
+    text-align: center;
+    margin-bottom: 0.5em;
+}
+
+.fileButton {
+    @include m.button;
+    border-color: black;
+    @include m.font-small;
+}

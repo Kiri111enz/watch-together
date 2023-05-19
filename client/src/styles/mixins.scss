@@ -18,6 +18,14 @@
     font-size: large;
 }
 
+@mixin font-small {
+    font-size: small;
+}
+
+@mixin font-bold {
+    font-weight: bold;
+}
+
 @mixin border-with-radius($radius) {
     border-style: solid;
     border-radius: $radius;
@@ -30,6 +38,7 @@
     padding: 0.5em;
     margin: 0.25em;
     @include border-with-radius(2em);
+    text-align: center;
 
     transition: 0.2s;
     &:hover {
