@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Popup from 'components/Popup';
-import * as ioClient from 'services/ioClient';
+import { response } from 'services/ioClient';
 import styles from 'styles/Home.module.scss';
 
 enum MenuState {
@@ -19,7 +19,7 @@ const Home: React.FC = () => {
             <div className={styles.container}>
                 <button className={styles.buttonLarge}
                     onClick={async () => {
-                        const roomId = await ioClient.createRoom();
+                        const roomId = await response('createRoom');
                         router.push({ pathname: `/${roomId}`, query: { host: true } }, `/${roomId}`);
                     }}>Create room</button>
                 <button className={styles.buttonLarge}
@@ -32,7 +32,7 @@ const Home: React.FC = () => {
                     <input ref={roomIdInput} className={styles.textInput} type="text" placeholder="Enter room id..." />
                     <button className={styles.button}
                         onClick={async () => {
-                            if (await ioClient.joinRoom(roomIdInput.current.value))
+                            if (await response('joinRoom', roomIdInput.current.value))
                                 router.push(
                                     { pathname: `/${roomIdInput.current.value}`, query: { host: false }}, 
                                     `/${roomIdInput.current.value}`

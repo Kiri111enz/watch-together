@@ -2,7 +2,7 @@ import io from 'socket.io-client';
 
 const socket = io(process.env.NEXT_PUBLIC_IO_URL);
 
-const waitforResponse = (eventName: string): Promise<unknown> => {
+export const receive = (eventName: string): Promise<unknown> => {
     return new Promise((resolve, reject) => {
         socket.once(eventName, msg => resolve(msg));
         setTimeout(() => {
@@ -12,17 +12,11 @@ const waitforResponse = (eventName: string): Promise<unknown> => {
     });
 };
 
-export const createRoom = (): Promise<number> => {
-    socket.emit('createRoom');
-    return waitforResponse('createRoom') as Promise<number>;
+export const send = (eventName: string, data: unknown={}): void => {
+    socket.emit(eventName, data);
 };
 
-export const joinRoom = (id: number): Promise<boolean> => {
-    socket.emit('joinRoom', id);
-    return waitforResponse('joinRoom') as Promise<boolean>;
-};
-
-export const roomExists = (id: string): Promise<boolean> => {
-    socket.emit('roomExists', id);
-    return waitforResponse('roomExists') as Promise<boolean>;
+export const response = (eventName: string, data: unknown={}): Promise<unknown> => {
+    send(eventName, data);
+    return receive(eventName);
 };

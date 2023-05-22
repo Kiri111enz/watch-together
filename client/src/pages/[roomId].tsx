@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { GetServerSideProps } from 'next';
 import Popup from 'components/Popup';
-import { roomExists } from 'services/ioClient';
+import { response } from 'services/ioClient';
 import { queryToBool } from 'utils';
 import styles from 'styles/VideoPage.module.scss';
 
@@ -35,7 +35,7 @@ const VideoPage: React.FC<VideoPageProps> = (props) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const { params: { roomId }, query: { host } } = context;
-    if (await roomExists(roomId as string))
+    if (await response('roomExists', roomId))
         return { props: { roomId, host: queryToBool(host as string) }};
     return { notFound: true };
 };
