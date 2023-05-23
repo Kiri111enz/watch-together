@@ -1,0 +1,17 @@
+@use 'mixins' as m;
+
+#closeButton {
+    position: absolute;
+    right: 0.5em;
+    top: 0.3em;
+    height: 0;
+
+    background: white;
+    border: none;
+
+    @include m.font-large;
+}
+
+#closeButton:hover {
+    color: red;
+}

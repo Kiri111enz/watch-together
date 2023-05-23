@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Popup from 'components/Popup';
 import { response } from 'services/ioClient';
 import styles from 'styles/Home.module.scss';
+import Alert from 'components/Alert';
 
 enum MenuState {
     None,
@@ -11,6 +12,7 @@ enum MenuState {
 
 const Home: React.FC = () => {
     const [menuState, setMenuState] = useState(MenuState.None);
+    const [showAlert, setShowAlert] = useState(false);
     const roomIdInput = useRef(null);
     const router = useRouter();
 
@@ -37,9 +39,15 @@ const Home: React.FC = () => {
                                     { pathname: `/${roomIdInput.current.value}`, query: { host: false }}, 
                                     `/${roomIdInput.current.value}`
                                 );
+                            else
+                                setShowAlert(true);
                         }}>Continue</button>
                 </div>
             </Popup>
+            }
+
+            {showAlert &&
+            <Alert message='Wrong roomId!' closeTime={5000} onClose={() => setShowAlert(false)} />
             }
         </>
     );

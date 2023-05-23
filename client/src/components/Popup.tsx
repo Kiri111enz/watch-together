@@ -1,4 +1,5 @@
 import { PropsWithChildren } from 'react';
+import CloseButton from './CloseButton';
 import styles from 'styles/Popup.module.scss';
 
 interface PopupProps {
@@ -10,7 +11,7 @@ const Popup: React.FC<PropsWithChildren<PopupProps>> = (props) => (
     <div className={styles.container}>
         <div className={styles.popup}>
             {props.showCloseButton !== false &&
-            <button id={styles.closeButton} onClick={props.onClose}>&times;</button>
+            <CloseButton onClick={props.onClose} />
             }
             {props.children}
         </div>

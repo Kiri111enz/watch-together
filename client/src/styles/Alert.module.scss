@@ -1,0 +1,15 @@
+@use 'mixins' as m;
+
+.alert {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+
+    background-color: white;
+    
+    padding: 0.5em 1.5em;
+    border-radius: 1em;
+    color: red;
+}
