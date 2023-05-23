@@ -2,19 +2,19 @@ import { Server, Socket } from 'socket.io';
 import http from 'http';
 import * as utils from './utils';
 
+interface ServerPlus extends Server {
+    hasRoom(id: string): boolean
+}
+
 interface SocketPlus extends Socket {
     roomId: string
 }
 
-export const init = (server: http.Server): void => {
-    const roomExists = (id: string): boolean => {
-        return io.sockets.adapter.rooms.has(id);
-    };
-
+export const init = (server: http.Server): ServerPlus => {
     const getUniqueRoomId = (): string => {
         while (true) {
             const id = utils.randomNumber(10).toString();
-            if (!roomExists(id))
+            if (!io.hasRoom(id))
                 return id;
         }
     };
@@ -24,10 +24,14 @@ export const init = (server: http.Server): void => {
         socket.join(roomId);
     };
     
-    const io = new Server(server, { cors: { origin: process.env.CLIENT_URL, methods: ['GET', 'POST'] }});
+    const io = new Server(server, { cors: { origin: process.env.CLIENT_URL, methods: ['GET', 'POST'] }}) as ServerPlus;
+
+    io.hasRoom = (id: string): boolean => {
+        return io.sockets.adapter.rooms.has(id);
+    };
 
     io.on('connection', (socket: SocketPlus) => {
-        console.log('New connection.');
+        console.log(`${socket.id} connected.`);
 
         socket.on('createRoom', () => {
             const roomId = getUniqueRoomId();
@@ -37,7 +41,7 @@ export const init = (server: http.Server): void => {
         });
 
         socket.on('joinRoom', (roomId: string) => {
-            if (!roomExists(roomId)) {
+            if (!io.hasRoom(roomId)) {
                 socket.emit('joinRoom', false);
                 return;
             }
@@ -47,8 +51,10 @@ export const init = (server: http.Server): void => {
             console.log(`Room ${roomId} has a new member.`);
         });
 
-        socket.on('roomExists', (roomId: string) => {
-            socket.emit('roomExists', roomExists(roomId));
+        socket.on('disconnect', () => {
+            console.log(`${socket.id} disconnected.`);
         });
     });
+
+    return io;
 };

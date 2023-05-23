@@ -1,9 +1,9 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useContext } from 'react';
 import { useRouter } from 'next/router';
+import { SocketContext } from './_app';
 import Popup from 'components/Popup';
-import { response } from 'services/ioClient';
-import styles from 'styles/Home.module.scss';
 import Alert from 'components/Alert';
+import styles from 'styles/Home.module.scss';
 
 enum MenuState {
     None,
@@ -15,13 +15,14 @@ const Home: React.FC = () => {
     const [showAlert, setShowAlert] = useState(false);
     const roomIdInput = useRef(null);
     const router = useRouter();
+    const socket = useContext(SocketContext);
 
     return (
         <>
             <div className={styles.container}>
                 <button className={styles.buttonLarge}
                     onClick={async () => {
-                        const roomId = await response('createRoom');
+                        const roomId = await socket.getResponse('createRoom');
                         router.push({ pathname: `/${roomId}`, query: { host: true } }, `/${roomId}`);
                     }}>Create room</button>
                 <button className={styles.buttonLarge}
@@ -34,7 +35,7 @@ const Home: React.FC = () => {
                     <input ref={roomIdInput} className={styles.textInput} type="text" placeholder="Enter room id..." />
                     <button className={styles.button}
                         onClick={async () => {
-                            if (await response('joinRoom', roomIdInput.current.value))
+                            if (await socket.getResponse('joinRoom', roomIdInput.current.value))
                                 router.push(
                                     { pathname: `/${roomIdInput.current.value}`, query: { host: false }}, 
                                     `/${roomIdInput.current.value}`
